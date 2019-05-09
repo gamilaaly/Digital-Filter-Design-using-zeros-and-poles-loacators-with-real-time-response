@@ -22,7 +22,7 @@ function varargout = tryingg(varargin)
 
 % Edit the above text to modify the response to help tryingg
 
-% Last Modified by GUIDE v2.5 08-May-2019 13:48:48
+% Last Modified by GUIDE v2.5 08-May-2019 22:12:09
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -58,6 +58,7 @@ handles.xp_array=[];
 handles.yp_array=[];
 handles.xz_array=[];
 handles.yz_array=[];
+handles.axes_extention = 1.2;
 % Update handles structure
 guidata(hObject, handles);
 
@@ -73,15 +74,29 @@ function varargout = tryingg_OutputFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
-axes(handles.axes1)
-t=-1:.01:1;
-round=sqrt(1-t.^2);     
-round2=-sqrt(1-t.^2);
-plot(t,round)
-hold on
-grid on
-plot(t,round2)      % Plots the circle with unit radius - lower semicircle
-axis([1 0 1 0])
+axes(handles.axes1);
+%%draw the circle
+ce = exp(j*2*pi*(0:.01:1));
+h = line(real(ce),imag(ce));
+set(h,'linestyle',':','color','b','HitTest','off')
+% draw the cartesian coordinates
+h = line([0 0],[-handles.axes_extention handles.axes_extention]);
+set(h,'linestyle',':','color','b','HitTest','off')
+h = line([-handles.axes_extention handles.axes_extention],[0 0]);
+set(h,'linestyle',':','color','b','HitTest','off')
+axis([-handles.axes_extention handles.axes_extention -handles.axes_extention handles.axes_extention]);
+
+xlabel('Real(z)');
+ylabel('Imag(z)');
+% axes(handles.axes1)
+% t=-1:.01:1;
+% round=sqrt(1-t.^2);     
+% round2=-sqrt(1-t.^2);
+% plot(t,round)
+% hold on
+% grid on
+% plot(t,round2)      % Plots the circle with unit radius - lower semicircle
+% axis([1 0 1 0])
 
 
 % --- Executes on button press in Addzeros.
@@ -146,3 +161,40 @@ y=4;
 %     plot(xz,yz,'x');
 % end 
 guidata(hObject,handles);
+
+
+% --------------------------------------------------------------------
+function hardwaremode_Callback(hObject, eventdata, handles)
+% hObject    handle to hardwaremode (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function Untitled_2_Callback(hObject, eventdata, handles)
+% hObject    handle to Untitled_2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on selection change in popupmenu2.
+function popupmenu2_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu2 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu2
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
