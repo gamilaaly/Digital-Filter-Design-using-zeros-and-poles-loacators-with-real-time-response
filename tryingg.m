@@ -58,7 +58,7 @@ handles.xp_array=[];
 handles.yp_array=[];
 handles.xz_array=[];
 handles.yz_array=[];
-handles.axes_extention = 1.2;
+handles.axes_extention = 1;
 % Update handles structure
 guidata(hObject, handles);
 
@@ -85,7 +85,8 @@ set(h,'linestyle',':','color','b','HitTest','off')
 h = line([-handles.axes_extention handles.axes_extention],[0 0]);
 set(h,'linestyle',':','color','b','HitTest','off')
 axis([-handles.axes_extention handles.axes_extention -handles.axes_extention handles.axes_extention]);
-
+hold on
+grid on
 xlabel('Real(z)');
 ylabel('Imag(z)');
 % axes(handles.axes1)
@@ -132,7 +133,8 @@ if get(handles.Addpoles,'value')
          handles.xp_array(end+1)=handles.xp;
          handles.xp_array
          handles.yp_array(end+1)=handles.yp;
-         plot(handles.xp,handles.yp,'X');
+         handles.yp_array
+         plot(handles.xp,handles.yp,'x','markersize',10);
 end
 guidata(hObject,handles);
 
@@ -144,16 +146,16 @@ function Delete_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
   axes_handle = gca;
-  pt = get(axes_handle,'currentpoint');
-  x  = pt(1);
-  y  = pt(1,2);
-  handles.x_array(end+1)=x;
-  handles.x_array
-xz=[1,2,3,4];
-yz=[1,2,3,4];
-plot(xz,yz,'x');
-x=4;
-y=4;
+  [x,y]=ginput(1);
+  x
+  y
+  points = get(axes_handle,'currentpoint');
+  Dx  = points(1);
+  Dy  = points(1,2);
+  plot(x,y,'');
+%   temp=find((real(handles.z <(x+0.1)) & real(handles.z>(x-0.1))));
+%   handles.z(find((real(handles.z <(x+0.1)) & real(handles.z>(x-0.1)))))=[];
+
 %  [a,b,button]=ginput(1);
 % if button==1
 %     xz(xz==x)=[];
