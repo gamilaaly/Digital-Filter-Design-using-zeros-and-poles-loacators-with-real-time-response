@@ -16,7 +16,7 @@ x=z_coordinate.*sin(theta);
 y=z_coordinate.*cos(theta);
 z_coordinate=x+y*i;
 % dol el 2 arrays ely  gayeen mn goz2 eman 
-zeros=[1 ; .7+i]; % lazem column vector 3shan zp2tf
+zeros=[1 ; .7+i ;.7-i]; % lazem column vector 3shan zp2tf
 poles=[1;.5];
 %get tf from from zeros and poles matlab
 [num_coeff,den_coeff]=zp2tf(zeros,poles,1); % 1 dah kan k 
@@ -25,8 +25,10 @@ Polynomial_tf= tf(num_coeff,den_coeff);
 for k =1:length(z_coordinate)
    substitution_in_tf(k)=evalfr(Polynomial_tf,z_coordinate(k));
    substitution_in_tf=substitution_in_tf(:);
-   gain_matlab=20*log(substitution_in_tf); % to get mag of tf
+   gain_matlab=20*log10(substitution_in_tf); % to get mag of tf
 end
+% [gain_matlab,phase_resp]=freqz(num_coeff,den_coeff,315);
+% gain_matlab=20*log10(abs(gain_matlab));
 figure
 plot (Frequency,gain_matlab)
 
@@ -45,7 +47,7 @@ for i=1:length(z_coordinate)
       distance(i)= distance(i)*(1./norm(z_coordinate(i)- poles(j)));
     end
 end
-manual_gain=20*log(distance);
+manual_gain=20*log10(distance);
 figure 
 plot(Frequency, manual_gain);
 
