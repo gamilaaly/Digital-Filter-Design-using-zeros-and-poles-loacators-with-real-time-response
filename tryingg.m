@@ -22,7 +22,7 @@ function varargout = tryingg(varargin)
 
 % Edit the above text to modify the response to help tryingg
 
-% Last Modified by GUIDE v2.5 08-May-2019 22:12:09
+% Last Modified by GUIDE v2.5 09-May-2019 02:47:40
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -55,10 +55,13 @@ function tryingg_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for tryingg
 handles.output = hObject;
 handles.xp_array=[];
+handles.zeros_array=[];%imaginary
+handles.poles_array=[];
 handles.yp_array=[];
 handles.xz_array=[];
 handles.yz_array=[];
-handles.axes_extention = 1;
+handles.axes_extention = 1.2;
+handles.contents=0;
 % Update handles structure
 guidata(hObject, handles);
 
@@ -105,15 +108,39 @@ function Addzeros_Callback(hObject, eventdata, handles)
 % hObject    handle to Addzeros (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-if get(handles.Addzeros,'value') 
-axes_handle = gca;
-         handles.zeros = get(axes_handle,'currentpoint');
-         handles.xz  = handles.zeros(1);
-         handles.yz  = handles.zeros(1,2);
+if get(handles.Addzeros,'value')
+    handles.contents
+    if  handles.contents==1 
+        'in'
+         axes_handle = gca;
+         handles.poles = get(axes_handle,'currentpoint');
+         handles.xz  = handles.poles(1);
+         handles.yz  = handles.poles(1,2);
          handles.xz_array(end+1)=handles.xz;
          handles.xz_array
          handles.yz_array(end+1)=handles.yz;
-         plot(handles.xz,handles.yz,'O');
+         handles.yz_array
+         handles.zeros_array=handles.xz_array+i.*handles.yz_array;
+         handles.zeros_array
+         plot(handles.xz_array,handles.yz_array,'O','markersize',20);
+     else if handles.contents==2
+             'in2'
+          axes_handle = gca;
+         handles.poles = get(axes_handle,'currentpoint');
+         handles.xz  = handles.poles(1);
+         handles.yz  = handles.poles(1,2);
+         handles.xz_array(end+1)=handles.xz;
+         handles.xz_array
+         handles.yz_array(end+1)=handles.yz;
+         handles.yz_array
+         handles.xz_array(end+1)=handles.xz;
+         handles.yz_array(end+1)=-handles.yz;
+         handles.zeros_array=handles.xz_array+i.*handles.yz_array;
+         %handles.zeros_array(end+1)=handles.xz_array +i.*handles.yz_array;
+         handles.zeros_array
+         plot(handles.xz_array,handles.yz_array,'O','markersize',20); 
+      end
+    end    
 end
 guidata(hObject,handles);
 
@@ -134,6 +161,8 @@ if get(handles.Addpoles,'value')
          handles.xp_array
          handles.yp_array(end+1)=handles.yp;
          handles.yp_array
+         handles.poles_array=handles.xp_array+i.*handles.yp_array;
+         handles.poles_array
          plot(handles.xp_array,handles.yp_array,'x','markersize',20);
        
 end
@@ -141,9 +170,9 @@ guidata(hObject,handles);
 
 
 
-% --- Executes on button press in Delete.
-function Delete_Callback(hObject, eventdata, handles)
-% hObject    handle to Delete (see GCBO)
+% --- Executes on button press in DeleteZeros.
+function DeleteZeros_Callback(hObject, eventdata, handles)
+% hObject    handle to DeleteZeros (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
   axes_handle = gca;
@@ -151,38 +180,38 @@ function Delete_Callback(hObject, eventdata, handles)
   x
   y
   %temp=find((handles.xp_array & handles.yp_array);
-   %handles.yp_array(find(handles.yp_array<(y+0.3))& (handles.yp_array>(y+.3)))=[];
+  %handles.yp_array(find(handles.yp_array<(y+0.3))& (handles.yp_array>(y+.3)))=[];
   %temp=find((real(handles.z <(x+0.1)) & real(handles.z>(x-0.1))));
-
-   %temp=find((handles.xp_array<(x)& (handles.xp_array>x));
+  %temp=find((handles.xp_array<(x)& (handles.xp_array>x));
   %temp
   %handles.xp_array(find(handles.xp_array<(x+0.1))& (handles.xp_array>(x-0.1)))=[];
   %handles.yp_array(find(real(handles.yp_array<(y+0.1)))& real((handles.yp_array>(y-0.1))))=[];
-  handles.xp_array(find(handles.xp_array==(x)))=[];
-  handles.yp_array(find(handles.yp_array==(y)))=[];
-  handles.xp_array
-  handles.yp_array
+  handles.xz_array(find(handles.xz_array==(x)))=[];
+  handles.yz_array(find(handles.yz_array==(y)))=[];
+  handles.xz_array
+  handles.yz_array
+  handles.zeros_array=handles.xz_array+i.*handles.yz_array;
   cla(handles.axes1,'reset'); 
   axes(handles.axes1)
-ce = exp(j*2*pi*(0:.01:1));
-h = line(real(ce),imag(ce));
-set(h,'linestyle',':','color','b','HitTest','off')
-% draw the cartesian coordinates
-h = line([0 0],[-handles.axes_extention handles.axes_extention]);
-set(h,'linestyle',':','color','b','HitTest','off')
-h = line([-handles.axes_extention handles.axes_extention],[0 0]);
-set(h,'linestyle',':','color','b','HitTest','off')
-axis([-handles.axes_extention handles.axes_extention -handles.axes_extention handles.axes_extention]);
-hold on
-grid on
-xlabel('Real(z)');
-ylabel('Imag(z)');
- %   c_draw(hObject, eventdata, handles);
- %    hold on
-  plot(handles.xp_array,handles.yp_array,'x','markersize',10);
-
-%  [a,b,button]=ginput(1);
-% if button==1
+  ce = exp(j*2*pi*(0:.01:1)); 
+  h = line(real(ce),imag(ce));
+  set(h,'linestyle',':','color','b','HitTest','off')
+  % draw the cartesian coordinates
+  h = line([0 0],[-handles.axes_extention handles.axes_extention]);
+  set(h,'linestyle',':','color','b','HitTest','off')
+  h = line([-handles.axes_extention handles.axes_extention],[0 0]);
+  set(h,'linestyle',':','color','b','HitTest','off')
+  axis([-handles.axes_extention handles.axes_extention -handles.axes_extention handles.axes_extention]);
+  hold on
+  grid on
+  xlabel('Real(z)');
+  ylabel('Imag(z)');
+  %   c_draw(hObject, eventdata, handles);
+  %    hold on
+  plot(handles.xz_array,handles.yz_array,'O','markersize',20);
+  plot(handles.xp_array,handles.yp_array,'x','markersize',20);
+ %  [a,b,button]=ginput(1);
+ % if button==1
 %     xz(xz==x)=[];
 %     yz(yz==y)=[];
 %     plot(xz,yz,'x');
@@ -212,8 +241,14 @@ function popupmenu2_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns popupmenu2 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenu2
+%contents = cellstr(get(hObject,'String'));  
+handles.contents=get(hObject,'Value');
+handles.contents
+guidata(hObject,handles);
 
-
+% if contents==2
+%     handles.mode=1;
+% end
 % --- Executes during object creation, after setting all properties.
 function popupmenu2_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to popupmenu2 (see GCBO)
@@ -225,3 +260,41 @@ function popupmenu2_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in DeletePoles.
+function DeletePoles_Callback(hObject, eventdata, handles)
+% hObject    handle to DeletePoles (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+  axes_handle = gca;
+  [x,y]=ginput(1);
+  x
+  y
+  handles.xp_array(find(handles.xp_array==(x)))=[];
+  handles.yp_array(find(handles.yp_array==(y)))=[];
+  handles.xp_array=handles.xp_array;
+  handles.yp_array=handles.yp_array;
+  'gded'
+  handles.xp_array
+  handles.yp_array
+  handles.poles_array=handles.xp_array+i.*handles.yp_array;
+  cla(handles.axes1,'reset'); 
+  axes(handles.axes1)
+  ce = exp(j*2*pi*(0:.01:1)); 
+  h = line(real(ce),imag(ce));
+  set(h,'linestyle',':','color','b','HitTest','off')
+  % draw the cartesian coordinates
+  h = line([0 0],[-handles.axes_extention handles.axes_extention]);
+  set(h,'linestyle',':','color','b','HitTest','off')
+  h = line([-handles.axes_extention handles.axes_extention],[0 0]);
+  set(h,'linestyle',':','color','b','HitTest','off')
+  axis([-handles.axes_extention handles.axes_extention -handles.axes_extention handles.axes_extention]);
+  hold on
+  grid on
+  xlabel('Real(z)');
+  ylabel('Imag(z)');
+  %   c_draw(hObject, eventdata, handles);
+  %    hold on
+  plot(handles.xz_array,handles.yz_array,'O','markersize',20);
+  plot(handles.xp_array,handles.yp_array,'x','markersize',20);
