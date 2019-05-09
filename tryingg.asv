@@ -134,7 +134,7 @@ if get(handles.Addpoles,'value')
          handles.xp_array
          handles.yp_array(end+1)=handles.yp;
          handles.yp_array
-         plot(handles.xp_array,handles.yp_array,'x','markersize',20);
+         plot(handles.xp_array,handles.yp_array,'x','markersize',15);
        
 end
 guidata(hObject,handles);
@@ -163,22 +163,10 @@ function Delete_Callback(hObject, eventdata, handles)
   handles.xp_array
   handles.yp_array
   cla(handles.axes1,'reset'); 
-  axes(handles.axes1)
-ce = exp(j*2*pi*(0:.01:1));
-h = line(real(ce),imag(ce));
-set(h,'linestyle',':','color','b','HitTest','off')
-% draw the cartesian coordinates
-h = line([0 0],[-handles.axes_extention handles.axes_extention]);
-set(h,'linestyle',':','color','b','HitTest','off')
-h = line([-handles.axes_extention handles.axes_extention],[0 0]);
-set(h,'linestyle',':','color','b','HitTest','off')
-axis([-handles.axes_extention handles.axes_extention -handles.axes_extention handles.axes_extention]);
-hold on
-grid on
-xlabel('Real(z)');
-ylabel('Imag(z)');
+ axes(handles.axes1)
+
  %   c_draw(hObject, eventdata, handles);
- %    hold on
+%    hold on
   plot(handles.xp_array,handles.yp_array,'x','markersize',10);
 
 %  [a,b,button]=ginput(1);
